@@ -160,11 +160,7 @@ export default function App() {
               Please select your name
             </option>
             {users.map((val) => {
-              return (
-                <option value={val.id}>
-                  {val.name} - {val.id}
-                </option>
-              );
+              return <option value={val.id}>{val.name}</option>;
             })}
           </select>
         </div>
