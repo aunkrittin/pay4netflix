@@ -224,7 +224,7 @@ export default function App() {
       <hr />
       <footer>
         <p>This is an early-access. The website may bug pls contact me.</p>
-        <p>Created by Krittin Chayasophat && Jomson. © 2022</p>
+        <p>Created by Krittin Chayasophat && Jomson. 2022</p>
       </footer>
     </div>
   );
