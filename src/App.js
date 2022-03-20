@@ -170,7 +170,14 @@ export default function App() {
           </label>
           {months.map((val) => {
             return (
-              <div className="form-check">
+              <div
+                style={
+                  val.checked
+                    ? { backgroundColor: "#00ff00" }
+                    : { backgroundColor: "#ea4335" }
+                }
+                className="form-check"
+              >
                 <input
                   className="form-check-input"
                   type="checkbox"
@@ -191,7 +198,7 @@ export default function App() {
           <input
             type="date"
             className="form-control"
-            placeholder="Enter Time"
+            placeholder="Enter Date"
             onChange={(event) => {
               setDateAt(event.target.value);
             }}
