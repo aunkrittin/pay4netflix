@@ -1,10 +1,40 @@
 import "./App.css";
 import { collection, onSnapshot, setDoc, doc } from "firebase/firestore";
+import { storage } from "./firebase";
 // import axios from "axios";
 import { useState, useEffect } from "react";
 import db from "./firebase";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 export default function App() {
+  const [progress, setProgress] = useState(0);
+  const formHandler = (e) => {
+    e.preventDefault();
+    const file = e.target[0].files[0];
+    uploadFiles(file);
+  };
+
+  const uploadFiles = (file) => {
+    if (!file) return;
+    const storageRef = ref(storage, `/file/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+
+        setProgress(prog);
+      },
+      (err) => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
+      }
+    );
+  };
+
   const [users, setUsers] = useState([]);
   const [months, setMonths] = useState([
     { name: "January", Status: false },
@@ -92,7 +122,7 @@ export default function App() {
       window.location.reload(false);
     }
 
-    console.log(payload);
+    //console.log(payload);
   };
 
   useEffect(
@@ -217,9 +247,21 @@ export default function App() {
             }}
           />
         </div>
-        <button className="btn btn-success" onClick={handleEdit}>
-          Add Data
-        </button>
+        <div className="mb-3">
+          <form onSubmit={formHandler}>
+            <input type="file" className="form-control" />
+            <br />
+            <button
+              className="btn btn-success"
+              onClick={() => {
+                handleEdit();
+                formHandler();
+              }}
+            >
+              Add Data
+            </button>
+          </form>
+        </div>
       </div>
       <hr />
       <footer>
