@@ -1,94 +1,126 @@
 import "./App.css";
 import axios from "axios";
+import { useState } from "react";
 
-import React, { Component } from "react";
+function App() {
+  const [name, setName] = useState("");
+  const [monthAt, setMonthAt] = useState("");
+  const [timeAt, setTimeAt] = useState("");
+  const [confirmed, setConfirmed] = useState(0);
 
-class App extends Component {
-  state = {
-    // Initially, no file is selected
-    selectedFile: null,
+  const [showdataList, setDataList] = useState([]);
+
+  const getData = () => {
+    axios.get("http://localhost:3001/showdata").then((response) => {
+      setDataList(response.data);
+    });
   };
 
-  // On file select (from the pop up)
-  onFileChange = (event) => {
-    // Update the state
-    this.setState({ selectedFile: event.target.files[0] });
+  const addData = () => {
+    axios
+      .post("http://localhost:3001/create", {
+        name: name,
+        monthAt: monthAt,
+        timeAt: timeAt,
+        confirmed: confirmed,
+      })
+      .then(() => {
+        setDataList([
+          ...showdataList,
+          {
+            name: name,
+            monthAt: monthAt,
+            timeAt: timeAt,
+            confirmed: confirmed,
+          },
+        ]);
+      });
   };
-
-  // On file upload (click the upload button)
-  onFileUpload = () => {
-    // Create an object of formData
-    const formData = new FormData();
-
-    // Update the formData object
-    formData.append(
-      "myFile",
-      this.state.selectedFile,
-      this.state.selectedFile.name
-    );
-
-    // Details of the uploaded file
-    console.log(this.state.selectedFile);
-
-    // Request made to the backend api
-    // Send formData object
-    axios.post("api/uploadfile", formData);
-  };
-
-  // File content to be displayed after
-  // file upload is complete
-  fileData = () => {
-    if (this.state.selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
-
-          <p>File Name: {this.state.selectedFile.name}</p>
-
-          <p>File Type: {this.state.selectedFile.type}</p>
-
-          <p>
-            Last Modified:{" "}
-            {this.state.selectedFile.lastModifiedDate.toDateString()}
-          </p>
-        </div>
-      );
-    }
-  };
-
-  render() {
-    return (
-      <div className="Netflix">
-        <h1>Payment Monthly</h1>
-        <h3>NETFLIX</h3>
-        <label>
-          ชื่อ:<span>&nbsp;&nbsp;</span>
-          <input type="name" name="name" />
-        </label>
-        <labe>
-          <br />
-          <br />
-          วันที่:<span>&nbsp;&nbsp;</span>
-          <input type="date" name="date" />
-        </labe>
-        <label>
-          <br />
-          <br />
-          เวลา:<span>&nbsp;&nbsp;</span>
-          <input type="time" name="time" />
-        </label>
-        <div>
-          <br />
-          <br />
-          <input type="file" onChange={this.onFileChange} />
-          <br />
-          <br />
-          <button onClick={this.onFileUpload}>Upload</button>
-        </div>
-        {this.fileData()}
+  return (
+    <div className="App container">
+      <h1>Payment Monthly</h1>
+      <h3>NETFLIX</h3>
+      <div className="information">
+        <form action="">
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">
+              Name:
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter Name"
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="month" className="form-label">
+              Month:
+            </label>
+            <input
+              type="month"
+              min="2022-01"
+              className="form-control"
+              placeholder="Enter Date"
+              onChange={(event) => {
+                setMonthAt(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">
+              Time:
+            </label>
+            <input
+              type="time"
+              className="form-control"
+              placeholder="Enter Time"
+              onChange={(event) => {
+                setTimeAt(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">
+              Confirmed:
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="0"
+              onChange={(event) => {
+                setConfirmed(event.target.value);
+              }}
+              readOnly
+            />
+          </div>
+          <button className="btn btn-success" onClick={addData}>
+            Add Data
+          </button>
+        </form>
       </div>
-    );
-  }
+      <hr />
+      <div className="showdata">
+        <button className="btn btn-primary">Show Data</button>
+        <br />
+        <br />
+        {getData}
+        {showdataList.map((val, key) => {
+          return (
+            <div className="data card">
+              <div className="card-body text-left">
+                <p className="card-text">Name: {val.name}</p>
+                <p className="card-text">Month: {val.monthAt}</p>
+                <p className="card-text">Time: {val.timeAt}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default App;
