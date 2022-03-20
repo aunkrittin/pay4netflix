@@ -23,6 +23,16 @@ app.get("/showdata", (req, res) => {
   });
 });
 
+app.get("/alldata", (req, res) => {
+  db.query("SELECT * FROM users", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.post("/create", (req, res) => {
   const name = req.body.name;
   const monthAt = req.body.monthAt;
