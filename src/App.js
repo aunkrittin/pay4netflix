@@ -87,7 +87,7 @@ export default function App() {
         }
       }
     });
-    console.log(months);
+    //console.log(months);
     setMonths(m);
   }
 
