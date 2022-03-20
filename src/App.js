@@ -248,6 +248,9 @@ export default function App() {
           />
         </div>
         <div className="mb-3">
+          <label htmlFor="name" className="form-label">
+            Upload image:
+          </label>
           <form onSubmit={formHandler}>
             <input type="file" className="form-control" />
             <br />
