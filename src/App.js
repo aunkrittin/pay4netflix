@@ -7,6 +7,7 @@ import db from "./firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 export default function App() {
+  //Upload image
   const [progress, setProgress] = useState(0);
   const formHandler = (e) => {
     e.preventDefault();
@@ -16,7 +17,7 @@ export default function App() {
 
   const uploadFiles = (file) => {
     if (!file) return;
-    const storageRef = ref(storage, `/file/${file.name}`);
+    const storageRef = ref(storage, `/bills/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -34,6 +35,7 @@ export default function App() {
       }
     );
   };
+  ////
 
   const [users, setUsers] = useState([]);
   const [months, setMonths] = useState([
@@ -54,6 +56,7 @@ export default function App() {
   const [usrId, setUsrId] = useState();
   const [timeAt, setTimeAt] = useState();
   const [dateAt, setDateAt] = useState();
+  const [price, setPrice] = useState();
 
   function getUserMonth(event) {
     let id = event.target.value;
@@ -108,6 +111,7 @@ export default function App() {
       if (m.change) {
         m.time = timeAt;
         m.dateAt = dateAt;
+        m.price = price;
       }
     });
     const payload = {
@@ -178,7 +182,7 @@ export default function App() {
       <div className="information">
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-            Name:
+            ชื่อ:
           </label>
           <select
             name="cars"
@@ -195,8 +199,20 @@ export default function App() {
           </select>
         </div>
         <div className="mb-3">
+          <label htmlFor="price" className="form-label">
+            ราคา:
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            onChange={(event) => {
+              setPrice(event.target.value);
+            }}
+          />
+        </div>
+        <div className="mb-3">
           <label htmlFor="month" className="form-label">
-            Month:
+            เดือน:
           </label>
           {months.map((val) => {
             return (
@@ -223,7 +239,7 @@ export default function App() {
         </div>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-            Date:
+            วันที่:
           </label>
           <input
             type="date"
@@ -236,7 +252,7 @@ export default function App() {
         </div>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-            Time:
+            เวลา:
           </label>
           <input
             type="time"
@@ -249,7 +265,7 @@ export default function App() {
         </div>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-            Upload image:
+            อัพโหลดรูป:
           </label>
           <form onSubmit={formHandler}>
             <input type="file" className="form-control" />
@@ -258,10 +274,9 @@ export default function App() {
               className="btn btn-success"
               onClick={() => {
                 handleEdit();
-                formHandler();
               }}
             >
-              Add Data
+              เพิ่มข้อมูล
             </button>
           </form>
         </div>
