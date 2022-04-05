@@ -282,10 +282,10 @@ export default function App() {
         </div>
       </div>
       <hr />
-      <footer>
+      <div className="footer-container">
         <p>This is an early-access. The website may bug pls contact me.</p>
         <p>Created by Krittin && Jomson. 2022</p>
-      </footer>
+      </div>
     </div>
   );
 }
