@@ -1,9 +1,8 @@
 import "./App.css";
 import { collection, onSnapshot, setDoc, doc } from "firebase/firestore";
-import { storage } from "./firebase";
 // import axios from "axios";
 import { useState, useEffect } from "react";
-import db from "./firebase";
+import db, { storage } from "./firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 export default function App() {
